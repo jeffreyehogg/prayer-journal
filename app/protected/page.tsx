@@ -1,36 +1,57 @@
+// In app/protected/page.tsx
 import { redirect } from "next/navigation";
-
 import { createClient } from "@/lib/supabase/server";
 import { InfoIcon } from "lucide-react";
-import { FetchDataSteps } from "@/components/tutorial/fetch-data-steps";
+
+// We will create this component in the next step
+// import { AddPrayerForm } from "@/components/AddPrayerForm";
 
 export default async function ProtectedPage() {
   const supabase = await createClient();
 
-  const { data, error } = await supabase.auth.getClaims();
-  if (error || !data?.claims) {
-    redirect("/auth/login");
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return redirect("/auth/login");
   }
+
+  // Fetch prayers for the logged-in user
+  const { data: prayers, error } = await supabase
+    .from("prayers")
+    .select("id, title, status")
+    .order("created_at", { ascending: false });
 
   return (
     <div className="flex-1 w-full flex flex-col gap-12">
-      <div className="w-full">
-        <div className="bg-accent text-sm p-3 px-5 rounded-md text-foreground flex gap-3 items-center">
-          <InfoIcon size="16" strokeWidth={2} />
-          This is a protected page that you can only see as an authenticated
-          user
-        </div>
+      <div className="flex justify-between items-center">
+        <h2 className="font-bold text-2xl">My Prayer Journal</h2>
+        {/* We will add this component soon */}
+        {/* <AddPrayerForm /> */}
       </div>
-      <div className="flex flex-col gap-2 items-start">
-        <h2 className="font-bold text-2xl mb-4">Your user details</h2>
-        <pre className="text-xs font-mono p-3 rounded border max-h-32 overflow-auto">
-          {JSON.stringify(data.claims, null, 2)}
-        </pre>
+
+      <div className="flex flex-col gap-4">
+        {prayers && prayers.length > 0 ? (
+          prayers.map((prayer) => (
+            <div
+              key={prayer.id}
+              className="p-4 border rounded-md flex justify-between items-center"
+            >
+              <span className="text-lg">{prayer.title}</span>
+              <span className="text-sm font-medium text-muted-foreground bg-muted px-2 py-1 rounded-full">
+                {prayer.status}
+              </span>
+            </div>
+          ))
+        ) : (
+          <p className="text-muted-foreground">
+            You haven't added any prayers yet. Add one to get started!
+          </p>
+        )}
       </div>
-      <div>
-        <h2 className="font-bold text-2xl mb-4">Next steps</h2>
-        <FetchDataSteps />
-      </div>
+
+      {/* We can remove the old tutorial content */}
     </div>
   );
 }
