@@ -1,7 +1,7 @@
 import { AuthButton } from "@/components/auth-button";
-import { ThemeSwitcher } from "@/components/theme-switcher";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Footer } from "@/components/Footer";
 
 export default function ProtectedLayout({
   children,
@@ -20,7 +20,7 @@ export default function ProtectedLayout({
                 variant="link"
                 className="p-0 text-sm font-semibold text-muted-foreground"
               >
-                <Link href="/protected">Active Journal</Link>
+                <Link href="/protected">Prayer Journal</Link>
               </Button>
               <Button
                 asChild
@@ -36,10 +36,7 @@ export default function ProtectedLayout({
         <div className="flex-1 flex flex-col gap-20 max-w-5xl p-5">
           {children}
         </div>
-        <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-16">
-          <p>© 2025 Praylio</p>
-          <ThemeSwitcher />
-        </footer>
+        <Footer />
       </div>
     </main>
   );

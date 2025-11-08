@@ -1,4 +1,5 @@
 import { AuthButton } from "@/components/auth-button";
+import { Footer } from "@/components/Footer";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
@@ -40,11 +41,7 @@ export default async function Home() {
           </Button>
         </div>
 
-        {/* --- Footer --- */}
-        <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-16">
-          <p>© 2025 Praylio. All rights reserved.</p>
-          <ThemeSwitcher />
-        </footer>
+        <Footer />
       </div>
     </main>
   );
