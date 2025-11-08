@@ -3,12 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { AddPrayerForm } from "@/components/AddPrayerForm";
 import { PrayerList } from "@/components/PrayerList";
 import { AlertCircle } from "lucide-react";
-
-type Prayer = {
-  id: number;
-  title: string;
-  status: "Pending" | "Praying" | "Answered";
-};
+import { type Prayer } from "./actions";
 
 export default async function ProtectedPage() {
   const supabase = await createClient();
