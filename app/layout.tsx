@@ -9,7 +9,7 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Praylio - Your Personal Prayer Journal",
+  title: "Prayer Journal - Your Personal Prayer Journal",
   description: "A secure, private space to track your prayer journey.",
 };
 
