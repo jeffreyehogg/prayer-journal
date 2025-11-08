@@ -2,11 +2,11 @@
 
 import { useTransition, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { addJournalEntry } from "@/app/protected/actions";
+import { addNote } from "@/app/protected/actions";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 
-export function AddJournalEntryForm({ prayerId }: { prayerId: number }) {
+export function AddNoteForm({ prayerId }: { prayerId: number }) {
   const [isPending, startTransition] = useTransition();
   const [content, setContent] = useState("");
   const router = useRouter();
@@ -16,7 +16,7 @@ export function AddJournalEntryForm({ prayerId }: { prayerId: number }) {
     if (content.trim() === "") return;
 
     startTransition(async () => {
-      const result = await addJournalEntry(prayerId, content);
+      const result = await addNote(prayerId, content);
 
       if (!result?.error) {
         setContent("");
@@ -37,7 +37,7 @@ export function AddJournalEntryForm({ prayerId }: { prayerId: number }) {
         rows={4}
       />
       <Button type="submit" disabled={isPending} className="w-fit self-end">
-        {isPending ? "Saving..." : "Save Entry"}
+        {isPending ? "Saving..." : "Save Note"}
       </Button>
     </form>
   );

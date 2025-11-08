@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { type Prayer } from "../../actions";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { AddJournalEntryForm } from "@/components/AddJournalEntryForm";
+import { AddNoteForm } from "@/components/AddNoteForm";
 
 export default async function PrayerDetailsPage({
   params,
@@ -27,9 +27,9 @@ export default async function PrayerDetailsPage({
     .eq("id", awaitedParams.id)
     .single<Prayer>();
 
-  // Fetch the journal entries for this prayer
-  const { data: entries, error: entriesError } = await supabase
-    .from("journal_entries")
+  // Fetch the notes for this prayer
+  const { data: notes, error: notesError } = await supabase
+    .from("notes")
     .select("id, created_at, content")
     .eq("prayer_id", awaitedParams.id)
     .order("created_at", { ascending: false });
@@ -61,22 +61,22 @@ export default async function PrayerDetailsPage({
         </span>
       </div>
 
-      <AddJournalEntryForm prayerId={prayer.id} />
+      <AddNoteForm prayerId={prayer.id} />
 
-      {/* List of journal entries */}
+      {/* List of notes */}
       <div className="flex flex-col gap-4">
-        <h3 className="font-semibold text-xl">Journal</h3>
-        {entries && entries.length > 0 ? (
-          entries.map((entry) => (
-            <div key={entry.id} className="p-4 border rounded-md">
+        <h3 className="font-semibold text-xl">Notes</h3>
+        {notes && notes.length > 0 ? (
+          notes.map((note) => (
+            <div key={note.id} className="p-4 border rounded-md">
               <p className="text-sm text-muted-foreground">
-                {new Date(entry.created_at).toLocaleDateString()}
+                {new Date(note.created_at).toLocaleDateString()}
               </p>
-              <p className="mt-2">{entry.content}</p>
+              <p className="mt-2">{note.content}</p>
             </div>
           ))
         ) : (
-          <p className="text-muted-foreground">No journal entries yet.</p>
+          <p className="text-muted-foreground">No notes yet.</p>
         )}
       </div>
     </div>

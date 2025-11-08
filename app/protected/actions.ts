@@ -1,4 +1,3 @@
-// In app/protected/actions.ts
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
@@ -42,7 +41,7 @@ export async function deletePrayer(id: number) {
 }
 
 // ADD a journal entry
-export async function addJournalEntry(prayerId: number, content: string) {
+export async function addNote(prayerId: number, content: string) {
   const supabase = await createClient();
 
   const { data: { user } } = await supabase.auth.getUser();
@@ -51,7 +50,7 @@ export async function addJournalEntry(prayerId: number, content: string) {
   }
 
   const { error } = await supabase
-    .from("journal_entries")
+    .from("notes")
     .insert({
       prayer_id: prayerId,
       content: content,
@@ -59,7 +58,7 @@ export async function addJournalEntry(prayerId: number, content: string) {
     });
 
   if (error) {
-    console.error("Error adding journal entry:", error);
+    console.error("Error adding note:", error);
     return { error: error.message };
   }
 
