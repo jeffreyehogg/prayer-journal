@@ -7,6 +7,7 @@ export type Prayer = {
   id: number;
   title: string;
   status: "Pending" | "Praying" | "Answered";
+  category: string | null;
 };
 
 // UPDATE the prayer status

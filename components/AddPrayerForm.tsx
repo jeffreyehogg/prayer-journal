@@ -5,7 +5,6 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-
 import {
   Dialog,
   DialogContent,
@@ -16,9 +15,11 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 
 export function AddPrayerForm() {
   const [title, setTitle] = useState("");
+  const [category, setCategory] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const router = useRouter();
@@ -30,12 +31,15 @@ export function AddPrayerForm() {
     const supabase = createClient();
     setIsLoading(true);
 
-    const { error } = await supabase
-      .from("prayers")
-      .insert({ title: title, status: "Pending" });
+    const { error } = await supabase.from("prayers").insert({
+      title: title,
+      status: "Pending",
+      category: category.trim() || null,
+    });
 
     if (!error) {
       setTitle("");
+      setCategory("");
       router.refresh();
       setOpen(false);
     } else {
@@ -64,6 +68,16 @@ export function AddPrayerForm() {
             onChange={(e) => setTitle(e.target.value)}
             disabled={isLoading}
           />
+          <div className="grid gap-2">
+            <Label htmlFor="category">Category</Label>
+            <Input
+              id="category"
+              placeholder="E.g. Family, Work, Personal..."
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              disabled={isLoading}
+            />
+          </div>
           <DialogFooter>
             <Button type="submit" disabled={isLoading}>
               {isLoading ? "Adding..." : "Add Prayer"}

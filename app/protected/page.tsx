@@ -18,7 +18,7 @@ export default async function ProtectedPage() {
 
   const { data: prayers, error } = await supabase
     .from("prayers")
-    .select("id, title, status")
+    .select("id, title, status, category")
     .in("status", ["Pending", "Praying"])
     .order("created_at", { ascending: false })
     .returns<Prayer[]>();

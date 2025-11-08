@@ -46,6 +46,13 @@ export function PrayerList({ prayers }: { prayers: Prayer[] }) {
             {prayer.title}
           </Link>
 
+          {/* Prayer Category */}
+          {prayer.category && (
+            <Badge variant="outline" className="font-normal">
+              {prayer.category}
+            </Badge>
+          )}
+
           <div className="flex items-center gap-2">
             {/* Status Dropdown */}
             <DropdownMenu>

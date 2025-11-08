@@ -4,6 +4,7 @@ import { type Prayer } from "../../actions";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { AddNoteForm } from "@/components/AddNoteForm";
+import { Badge } from "@/components/ui/badge";
 
 export default async function PrayerDetailsPage({
   params,
@@ -23,7 +24,7 @@ export default async function PrayerDetailsPage({
   // Fetch the prayer
   const { data: prayer, error: prayerError } = await supabase
     .from("prayers")
-    .select("id, title, status")
+    .select("id, title, status, category")
     .eq("id", awaitedParams.id)
     .single<Prayer>();
 
@@ -56,9 +57,25 @@ export default async function PrayerDetailsPage({
 
       <div className="flex justify-between items-center">
         <h2 className="font-bold text-3xl">{prayer.title}</h2>
-        <span className="text-sm font-medium text-muted-foreground bg-muted px-3 py-1 rounded-full">
-          {prayer.status}
-        </span>
+        <div className="flex gap-2">
+          {prayer.category && (
+            <Badge variant="outline" className="text-sm">
+              {prayer.category}
+            </Badge>
+          )}
+          <Badge
+            variant={
+              prayer.status === "Answered"
+                ? "default"
+                : prayer.status === "Praying"
+                ? "secondary"
+                : "outline"
+            }
+            className="capitalize text-sm"
+          >
+            {prayer.status}
+          </Badge>
+        </div>
       </div>
 
       <AddNoteForm prayerId={prayer.id} />
