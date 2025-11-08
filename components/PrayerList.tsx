@@ -40,19 +40,19 @@ export function PrayerList({ prayers }: { prayers: Prayer[] }) {
           className="p-4 border rounded-md flex justify-between items-center"
         >
           {/* Prayer Title */}
-          <Link
-            href={`/protected/prayer/${prayer.id}`}
-            className="text-lg hover:underline"
-          >
-            {prayer.title}
-          </Link>
-
-          {/* Prayer Category */}
-          {prayer.category && (
-            <Badge variant="outline" className="font-normal">
-              {prayer.category}
-            </Badge>
-          )}
+          <div className="flex items-center gap-3">
+            <Link
+              href={`/protected/prayer/${prayer.id}`}
+              className="text-lg font-medium hover:underline" // Made title font-medium
+            >
+              {prayer.title}
+            </Link>
+            {prayer.category && (
+              <Badge variant="outline" className="font-normal">
+                {prayer.category}
+              </Badge>
+            )}
+          </div>
 
           <div className="flex items-center gap-2">
             {/* Status Dropdown */}
