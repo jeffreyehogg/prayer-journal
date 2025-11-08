@@ -56,7 +56,7 @@ export default async function PrayerDetailsPage({
         <Link href="/protected">← Back to Journal</Link>
       </Button>
 
-      <div className="flex justify-between items-center">
+      <div className="flex flex-wrap items-center gap-4">
         <h2 className="font-bold text-3xl">{prayer.title}</h2>
         <div className="flex gap-2">
           {prayer.category && (
