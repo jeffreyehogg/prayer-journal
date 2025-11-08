@@ -34,7 +34,7 @@ export default async function Home() {
             answered. All in one secure, private space.
           </p>
           <Button asChild size="lg">
-            <Link href={user ? "/protected" : "/login"}>
+            <Link href={user ? "/protected" : "/auth/login"}>
               {user ? "Go to Your Journal" : "Get Started"}
             </Link>
           </Button>
