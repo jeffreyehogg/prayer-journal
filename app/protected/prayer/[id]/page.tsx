@@ -3,13 +3,15 @@ import { createClient } from "@/lib/supabase/server";
 import { type Prayer } from "../../actions";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { AddJournalEntryForm } from "@/components/AddJournalEntryForm";
 
 export default async function PrayerDetailsPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   const supabase = await createClient();
+  const awaitedParams = await params;
 
   const {
     data: { user },
@@ -18,22 +20,32 @@ export default async function PrayerDetailsPage({
     return redirect("/auth/login");
   }
 
-  // Fetch the prayer itself
+  // Fetch the prayer
   const { data: prayer, error: prayerError } = await supabase
     .from("prayers")
-    .select("*")
-    .eq("id", params.id)
+    .select("id, title, status")
+    .eq("id", awaitedParams.id)
     .single<Prayer>();
 
   // Fetch the journal entries for this prayer
   const { data: entries, error: entriesError } = await supabase
     .from("journal_entries")
     .select("id, created_at, content")
-    .eq("prayer_id", params.id)
+    .eq("prayer_id", awaitedParams.id)
     .order("created_at", { ascending: false });
 
   if (prayerError || !prayer) {
-    return <div>Prayer not found.</div>;
+    return (
+      <div className="flex-1 w-full flex flex-col gap-8">
+        <Button asChild variant="outline" size="sm" className="w-fit">
+          <Link href="/protected">← Back to Journal</Link>
+        </Button>
+        <p>Prayer not found.</p>
+        {prayerError && (
+          <pre className="text-sm text-destructive">{prayerError.message}</pre>
+        )}
+      </div>
+    );
   }
 
   return (
@@ -49,7 +61,7 @@ export default async function PrayerDetailsPage({
         </span>
       </div>
 
-      {/* TODO: Add a form here to add new entries */}
+      <AddJournalEntryForm prayerId={prayer.id} />
 
       {/* List of journal entries */}
       <div className="flex flex-col gap-4">

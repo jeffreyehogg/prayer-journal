@@ -40,3 +40,28 @@ export async function deletePrayer(id: number) {
 
   revalidatePath("/protected");
 }
+
+// ADD a journal entry
+export async function addJournalEntry(prayerId: number, content: string) {
+  const supabase = await createClient();
+
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    return { error: "You must be logged in." };
+  }
+
+  const { error } = await supabase
+    .from("journal_entries")
+    .insert({
+      prayer_id: prayerId,
+      content: content,
+      user_id: user.id,
+    });
+
+  if (error) {
+    console.error("Error adding journal entry:", error);
+    return { error: error.message };
+  }
+
+  revalidatePath(`/protected/prayer/${prayerId}`);
+}
