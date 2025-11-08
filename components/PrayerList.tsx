@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { EditPrayerForm } from "./EditPrayerForm";
 
 export function PrayerList({ prayers }: { prayers: Prayer[] }) {
   const [isPending, startTransition] = useTransition();
@@ -97,7 +98,7 @@ export function PrayerList({ prayers }: { prayers: Prayer[] }) {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Delete Button */}
+            {/* "More" Menu (for Edit/Delete) */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" disabled={isPending}>
@@ -105,6 +106,8 @@ export function PrayerList({ prayers }: { prayers: Prayer[] }) {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
+                <EditPrayerForm prayer={prayer} />
+                <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="text-destructive"
                   onClick={() => {

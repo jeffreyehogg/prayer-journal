@@ -27,6 +27,30 @@ export async function updatePrayerStatus(id: number, status: Prayer["status"]) {
   revalidatePath("/protected");
 }
 
+// UPDATE a prayer
+export async function updatePrayer(
+  id: number,
+  title: string,
+  category: string | null,
+) {
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("prayers")
+    .update({ title: title, category: category })
+    .eq("id", id);
+
+  if (error) {
+    console.error("Error updating prayer:", error);
+    return { error: error.message };
+  }
+
+  // Revalidate all pages that show prayer lists
+  revalidatePath("/protected");
+  revalidatePath("/protected/answered");
+  revalidatePath(`/protected/prayer/${id}`);
+}
+
 // DELETE a prayer
 export async function deletePrayer(id: number) {
   const supabase = await createClient();
@@ -41,7 +65,7 @@ export async function deletePrayer(id: number) {
   revalidatePath("/protected");
 }
 
-// ADD a journal entry
+// ADD a note
 export async function addNote(prayerId: number, content: string) {
   const supabase = await createClient();
 
