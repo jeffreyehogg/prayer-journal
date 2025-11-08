@@ -10,6 +10,12 @@ export type Prayer = {
   category: string | null;
 };
 
+export type Note = {
+  id: number;
+  created_at: string;
+  content: string;
+};
+
 // UPDATE the prayer status
 export async function updatePrayerStatus(id: number, status: Prayer["status"]) {
   const supabase = await createClient();
@@ -84,6 +90,35 @@ export async function addNote(prayerId: number, content: string) {
 
   if (error) {
     console.error("Error adding note:", error);
+    return { error: error.message };
+  }
+
+  revalidatePath(`/protected/prayer/${prayerId}`);
+}
+
+// UPDATE a note's content
+export async function updateNote(noteId: number, content: string) {
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("notes")
+    .update({ content: content })
+    .eq("id", noteId);
+
+  if (error) {
+    console.error("Error updating note:", error);
+    return { error: error.message };
+  }
+}
+
+// DELETE a note
+export async function deleteNote(noteId: number, prayerId: number) {
+  const supabase = await createClient();
+
+  const { error } = await supabase.from("notes").delete().eq("id", noteId);
+
+  if (error) {
+    console.error("Error deleting note:", error);
     return { error: error.message };
   }
 

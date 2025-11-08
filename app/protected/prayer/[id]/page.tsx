@@ -4,6 +4,7 @@ import { type Prayer } from "../../actions";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { AddNoteForm } from "@/components/AddNoteForm";
+import { NoteList } from "@/components/NoteList";
 import { Badge } from "@/components/ui/badge";
 
 export default async function PrayerDetailsPage({
@@ -81,21 +82,8 @@ export default async function PrayerDetailsPage({
       <AddNoteForm prayerId={prayer.id} />
 
       {/* List of notes */}
-      <div className="flex flex-col gap-4">
-        <h3 className="font-semibold text-xl">Notes</h3>
-        {notes && notes.length > 0 ? (
-          notes.map((note) => (
-            <div key={note.id} className="p-4 border rounded-md">
-              <p className="text-sm text-muted-foreground">
-                {new Date(note.created_at).toLocaleDateString()}
-              </p>
-              <p className="mt-2">{note.content}</p>
-            </div>
-          ))
-        ) : (
-          <p className="text-muted-foreground">No notes yet.</p>
-        )}
-      </div>
+      {notes && <NoteList notes={notes} prayerId={prayer.id} />}
+      {notesError && <p className="text-destructive">Error loading notes.</p>}
     </div>
   );
 }
