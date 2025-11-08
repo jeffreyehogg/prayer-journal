@@ -25,7 +25,7 @@ export default async function ProtectedPage() {
 
   return (
     <div className="flex-1 w-full flex flex-col gap-12">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-wrap gap-4 justify-between items-center">
         <h2 className="font-bold text-2xl">My Prayer Journal</h2>
         <AddPrayerForm />
       </div>

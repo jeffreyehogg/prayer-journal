@@ -37,18 +37,18 @@ export function PrayerList({ prayers }: { prayers: Prayer[] }) {
       {prayers.map((prayer) => (
         <div
           key={prayer.id}
-          className="p-4 border rounded-md flex justify-between items-center"
+          className="p-4 border rounded-md flex justify-between items-center gap-4"
         >
           {/* Prayer Title */}
           <div className="flex items-center gap-3">
             <Link
               href={`/protected/prayer/${prayer.id}`}
-              className="text-lg font-medium hover:underline" // Made title font-medium
+              className="text-lg font-medium hover:underline"
             >
               {prayer.title}
             </Link>
             {prayer.category && (
-              <Badge variant="outline" className="font-normal">
+              <Badge variant="secondary" className="font-normal">
                 {prayer.category}
               </Badge>
             )}
@@ -58,7 +58,12 @@ export function PrayerList({ prayers }: { prayers: Prayer[] }) {
             {/* Status Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" disabled={isPending}>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  disabled={isPending}
+                  className="px-2"
+                >
                   <Badge
                     variant={
                       prayer.status === "Answered"
