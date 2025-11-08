@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { createClient } from "@/lib/supabase/client";
+import { useState, useTransition } from "react";
+import { addPrayer } from "@/app/protected/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
+import { Label } from "@/components/ui/label";
 import {
   Dialog,
   DialogContent,
@@ -13,39 +13,29 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogClose,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
 
 export function AddPrayerForm() {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (title.trim() === "") return;
 
-    const supabase = createClient();
-    setIsLoading(true);
+    startTransition(async () => {
+      const result = await addPrayer(title, category.trim() || null);
 
-    const { error } = await supabase.from("prayers").insert({
-      title: title,
-      status: "Pending",
-      category: category.trim() || null,
+      if (!result?.error) {
+        setTitle("");
+        setCategory("");
+        setOpen(false);
+      } else {
+        console.error("Error adding prayer:", result.error);
+      }
     });
-
-    if (!error) {
-      setTitle("");
-      setCategory("");
-      router.refresh();
-      setOpen(false);
-    } else {
-      console.error("Error adding prayer:", error.message);
-    }
-    setIsLoading(false);
   };
 
   return (
@@ -61,13 +51,16 @@ export function AddPrayerForm() {
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <Input
-            id="title"
-            placeholder="Pray for..."
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            disabled={isLoading}
-          />
+          <div className="grid gap-2">
+            <Label htmlFor="title">Prayer</Label>
+            <Input
+              id="title"
+              placeholder="Pray for..."
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              disabled={isPending}
+            />
+          </div>
           <div className="grid gap-2">
             <Label htmlFor="category">Category</Label>
             <Input
@@ -75,12 +68,12 @@ export function AddPrayerForm() {
               placeholder="E.g. Family, Work, Personal..."
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              disabled={isLoading}
+              disabled={isPending}
             />
           </div>
           <DialogFooter>
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? "Adding..." : "Add Prayer"}
+            <Button type="submit" disabled={isPending}>
+              {isPending ? "Adding..." : "Add Prayer"}
             </Button>
           </DialogFooter>
         </form>

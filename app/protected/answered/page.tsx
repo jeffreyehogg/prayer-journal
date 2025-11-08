@@ -18,7 +18,7 @@ export default async function AnsweredPage() {
     .from("prayers")
     .select("id, title, status, category")
     .eq("status", "Answered")
-    .order("created_at", { ascending: false })
+    .order("sort_order", { ascending: true })
     .returns<Prayer[]>();
 
   return (

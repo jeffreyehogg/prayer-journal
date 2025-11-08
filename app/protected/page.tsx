@@ -20,7 +20,7 @@ export default async function ProtectedPage() {
     .from("prayers")
     .select("id, title, status, category")
     .in("status", ["Pending", "Praying"])
-    .order("created_at", { ascending: false })
+    .order("sort_order", { ascending: true })
     .returns<Prayer[]>();
 
   return (

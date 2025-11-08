@@ -16,7 +16,70 @@ export type Note = {
   content: string;
 };
 
-// UPDATE the prayer status
+export async function addPrayer(title: string, category: string | null) {
+  const supabase = await createClient();
+
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: "You must be logged in." };
+
+  // 1. Find the highest current sort_order for this user
+  const { data: maxOrderPrayer, error: maxOrderError } = await supabase
+    .from("prayers")
+    .select("sort_order")
+    .eq("user_id", user.id)
+    .order("sort_order", { ascending: false })
+    .limit(1)
+    .single();
+
+  if (maxOrderError && maxOrderError.code !== 'PGRST116') {
+    console.error("Error fetching max sort_order:", maxOrderError);
+    return { error: maxOrderError.message };
+  }
+
+  const newSortOrder = (maxOrderPrayer?.sort_order ?? 0) + 1;
+
+  const { error: insertError } = await supabase
+    .from("prayers")
+    .insert({
+      title: title,
+      category: category,
+      status: "Pending",
+      user_id: user.id,
+      sort_order: newSortOrder,
+    });
+
+  if (insertError) {
+    console.error("Error adding prayer:", insertError);
+    return { error: insertError.message };
+  }
+
+  revalidatePath("/protected");
+}
+
+export async function updatePrayerOrder(orderedIds: number[]) {
+  const supabase = await createClient();
+
+  // Create an array of update promises
+  const updates = orderedIds.map((id, index) =>
+    supabase
+      .from("prayers")
+      .update({ sort_order: index + 1 }) // Use 1-based index for order
+      .eq("id", id)
+  );
+
+ const results = await Promise.all(updates);
+
+  const firstErrorResult = results.find((result) => result.error);
+
+  if (firstErrorResult && firstErrorResult.error) {
+    console.error("Error updating prayer order:", firstErrorResult.error);
+    return { error: firstErrorResult.error.message };
+  }
+
+  revalidatePath("/protected");
+  revalidatePath("/protected/answered");
+}
+
 export async function updatePrayerStatus(id: number, status: Prayer["status"]) {
   const supabase = await createClient();
 
@@ -33,7 +96,6 @@ export async function updatePrayerStatus(id: number, status: Prayer["status"]) {
   revalidatePath("/protected");
 }
 
-// UPDATE a prayer
 export async function updatePrayer(
   id: number,
   title: string,
@@ -51,13 +113,11 @@ export async function updatePrayer(
     return { error: error.message };
   }
 
-  // Revalidate all pages that show prayer lists
   revalidatePath("/protected");
   revalidatePath("/protected/answered");
   revalidatePath(`/protected/prayer/${id}`);
 }
 
-// DELETE a prayer
 export async function deletePrayer(id: number) {
   const supabase = await createClient();
 
@@ -71,7 +131,6 @@ export async function deletePrayer(id: number) {
   revalidatePath("/protected");
 }
 
-// ADD a note
 export async function addNote(prayerId: number, content: string) {
   const supabase = await createClient();
 
@@ -96,7 +155,6 @@ export async function addNote(prayerId: number, content: string) {
   revalidatePath(`/protected/prayer/${prayerId}`);
 }
 
-// UPDATE a note's content
 export async function updateNote(noteId: number, content: string) {
   const supabase = await createClient();
 
@@ -111,7 +169,6 @@ export async function updateNote(noteId: number, content: string) {
   }
 }
 
-// DELETE a note
 export async function deleteNote(noteId: number, prayerId: number) {
   const supabase = await createClient();
 
