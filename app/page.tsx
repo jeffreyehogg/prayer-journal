@@ -1,5 +1,6 @@
 import { AuthButton } from "@/components/auth-button";
 import { Footer } from "@/components/Footer";
+import { Navbar } from "@/components/Navbar";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
@@ -15,20 +16,12 @@ export default async function Home() {
   return (
     <main className="min-h-screen flex flex-col items-center">
       <div className="flex-1 w-full flex flex-col gap-20 items-center">
-        {/* --- Navigation Bar --- */}
-        <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-          <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
-            <div className="flex gap-5 items-center font-semibold">
-              <Link href={"/"}>Praylio</Link>
-            </div>
-            <AuthButton />
-          </div>
-        </nav>
+        <Navbar />
 
         {/* --- Hero Section --- */}
         <div className="flex-1 flex flex-col gap-12 max-w-2xl p-5 items-center text-center mt-12">
           <h1 className="text-5xl font-bold !leading-tight">
-            Your Private Digital Prayer Journal
+            Your Digital Prayer Journal
           </h1>
           <p className="text-lg text-muted-foreground max-w-lg">
             Organize your thoughts, track your journey, and see your prayers
