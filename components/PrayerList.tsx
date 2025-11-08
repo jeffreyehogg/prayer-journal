@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
+import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
 
 export function PrayerList({ prayers }: { prayers: Prayer[] }) {
   const [isPending, startTransition] = useTransition();
@@ -37,19 +39,30 @@ export function PrayerList({ prayers }: { prayers: Prayer[] }) {
           className="p-4 border rounded-md flex justify-between items-center"
         >
           {/* Prayer Title */}
-          <span className="text-lg">{prayer.title}</span>
+          <Link
+            href={`/protected/prayer/${prayer.id}`}
+            className="text-lg hover:underline"
+          >
+            {prayer.title}
+          </Link>
 
           <div className="flex items-center gap-2">
             {/* Status Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={isPending}
-                  className="w-28"
-                >
-                  {prayer.status}
+                <Button variant="outline" size="sm" disabled={isPending}>
+                  <Badge
+                    variant={
+                      prayer.status === "Answered"
+                        ? "default"
+                        : prayer.status === "Praying"
+                        ? "secondary"
+                        : "outline"
+                    }
+                    className="capitalize"
+                  >
+                    {prayer.status}
+                  </Badge>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
