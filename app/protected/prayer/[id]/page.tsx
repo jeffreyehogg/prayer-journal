@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { AddNoteForm } from "@/components/AddNoteForm";
 import { NoteList } from "@/components/NoteList";
 import { Badge } from "@/components/ui/badge";
+import { BackButton } from "@/components/BackButton";
 
 export default async function PrayerDetailsPage({
   params,
@@ -39,9 +40,7 @@ export default async function PrayerDetailsPage({
   if (prayerError || !prayer) {
     return (
       <div className="flex-1 w-full flex flex-col gap-8">
-        <Button asChild variant="outline" size="sm" className="w-fit">
-          <Link href="/protected">← Back to Journal</Link>
-        </Button>
+        <BackButton>← Back to Journal</BackButton>
         <p>Prayer not found.</p>
         {prayerError && (
           <pre className="text-sm text-destructive">{prayerError.message}</pre>
