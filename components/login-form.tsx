@@ -77,7 +77,7 @@ export function LoginForm({
         password,
       });
       if (error) throw error;
-      router.push("/protected/prayer");
+      router.push("/protected");
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
     } finally {
@@ -93,7 +93,6 @@ export function LoginForm({
           <CardDescription>Sign in to your account to continue</CardDescription>
         </CardHeader>
         <CardContent>
-          {/* --- NEW GOOGLE BUTTON & SEPARATOR --- */}
           <div className="flex flex-col gap-4">
             <Button
               variant="outline"
@@ -124,7 +123,7 @@ export function LoginForm({
                 <Input
                   id="email"
                   type="email"
-                  placeholder="m@example.com"
+                  placeholder="email@example.com"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
