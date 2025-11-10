@@ -93,7 +93,7 @@ export function LoginForm({
           <CardDescription>Sign in to your account to continue</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-col gap-4">
+          {/* <div className="flex flex-col gap-4">
             <Button
               variant="outline"
               className="w-full"
@@ -113,7 +113,7 @@ export function LoginForm({
                 </span>
               </div>
             </div>
-          </div>
+          </div> */}
 
           <form onSubmit={handleLogin} className="mt-4">
             {" "}

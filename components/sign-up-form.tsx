@@ -100,7 +100,7 @@ export function SignUpForm({
           <CardDescription>Create a new account</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-col gap-4">
+          {/* <div className="flex flex-col gap-4">
             <Button
               variant="outline"
               className="w-full"
@@ -120,7 +120,7 @@ export function SignUpForm({
                 </span>
               </div>
             </div>
-          </div>
+          </div> */}
 
           <form onSubmit={handleSignUp} className="mt-4">
             {" "}
