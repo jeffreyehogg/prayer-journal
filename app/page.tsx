@@ -27,6 +27,16 @@ export default async function Home() {
             Organize your thoughts, track your journey, and see your prayers
             answered. All in one secure, private space.
           </p>
+
+          <blockquote className="mt-4 p-4 border-l-4 border-border italic text-muted-foreground">
+            &quot;Do not be anxious about anything, but in every situation, by
+            prayer and petition, with thanksgiving, present your requests to
+            God.&quot;
+            <footer className="mt-2 text-sm not-italic font-medium">
+              Philippians 4:6
+            </footer>
+          </blockquote>
+
           <Button asChild size="lg">
             <Link href={user ? "/protected" : "/auth/login"}>
               {user ? "Go to Your Journal" : "Get Started"}

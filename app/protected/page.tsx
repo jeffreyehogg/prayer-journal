@@ -30,6 +30,13 @@ export default async function ProtectedPage() {
         <AddPrayerForm />
       </div>
 
+      <blockquote className="border-l-4 border-border pl-4 italic text-muted-foreground">
+        &quot;Devote yourselves to prayer, being watchful and thankful.&quot;
+        <footer className="mt-1 text-sm not-italic font-medium">
+          Colossians 4:2
+        </footer>
+      </blockquote>
+
       {error && (
         <div className="p-4 border border-destructive/50 bg-destructive/10 text-destructive-foreground rounded-md flex gap-4 items-center">
           <AlertCircle />

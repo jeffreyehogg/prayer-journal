@@ -27,6 +27,14 @@ export default async function AnsweredPage() {
         <h2 className="font-bold text-2xl">Answered Prayers</h2>
       </div>
 
+      <blockquote className="border-l-4 border-border pl-4 italic text-muted-foreground">
+        &quot;Rejoice always, pray continually, give thanks in all
+        circumstances; for this is God’s will for you in Christ Jesus.&quot;
+        <footer className="mt-1 text-sm not-italic font-medium">
+          1 Thessalonians 5:16-18
+        </footer>
+      </blockquote>
+
       {error && (
         <div className="p-4 border border-destructive/50 bg-destructive/10 text-destructive-foreground rounded-md flex gap-4 items-center">
           <AlertCircle />

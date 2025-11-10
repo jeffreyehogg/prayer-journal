@@ -79,6 +79,14 @@ export default async function PrayerDetailsPage({
         </div>
       </div>
 
+      <blockquote className="border-l-4 border-border pl-4 italic text-muted-foreground">
+        &quot;Then the Lord replied: 'Write down the revelation and make it
+        plain on tablets...'&quot;
+        <footer className="mt-1 text-sm not-italic font-medium">
+          Habakkuk 2:2
+        </footer>
+      </blockquote>
+
       <AddNoteForm prayerId={prayer.id} />
 
       {/* List of notes */}
