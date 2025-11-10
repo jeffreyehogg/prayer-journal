@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import {
+import { useState, useTransition, useEffect } from "react";import {
   deletePrayer,
   updatePrayerStatus,
   updatePrayerOrder,
@@ -47,7 +46,6 @@ function SortablePrayerItem({ prayer }: { prayer: Prayer }) {
       style={style}
       className="p-4 border rounded-md flex justify-between items-center gap-4 bg-background"
     >
-      {/* --- Left side (Handle, Title, Category) --- */}
       <div className="flex items-center gap-3">
         <button
           {...attributes}
@@ -71,9 +69,7 @@ function SortablePrayerItem({ prayer }: { prayer: Prayer }) {
         </div>
       </div>
 
-      {/* --- Right side (Buttons) --- */}
       <div className="flex items-center gap-2">
-        {/* Status Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -118,7 +114,6 @@ function SortablePrayerItem({ prayer }: { prayer: Prayer }) {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {/* "More" Menu (for Edit/Delete) */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="sm" disabled={isPending}>
@@ -147,13 +142,17 @@ function SortablePrayerItem({ prayer }: { prayer: Prayer }) {
 
 export function PrayerList({ 
   prayers: initialPrayers,
-  emptyMessage // <-- Add prop
+  emptyMessage
 }: { 
   prayers: Prayer[],
-  emptyMessage?: string // <-- Make it optional
+  emptyMessage?: string
 }) {
   const [prayers, setPrayers] = useState(initialPrayers);
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    setPrayers(initialPrayers);
+  }, [initialPrayers]);
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;

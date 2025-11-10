@@ -4,8 +4,15 @@ import { AddPrayerForm } from "@/components/AddPrayerForm";
 import { PrayerList } from "@/components/PrayerList";
 import { AlertCircle } from "lucide-react";
 import { type Prayer } from "./actions";
+import { SearchInput } from "@/components/SearchInput";
 
-export default async function ProtectedPage() {
+export default async function ProtectedPage({
+  searchParams,
+}: {
+  searchParams?: {
+    search?: string;
+  };
+}) {
   const supabase = await createClient();
 
   const {
@@ -16,10 +23,18 @@ export default async function ProtectedPage() {
     return redirect("/auth/login");
   }
 
-  const { data: prayers, error } = await supabase
+  const search = searchParams?.search || "";
+
+  let query = supabase
     .from("prayers")
     .select("id, title, status, category")
-    .in("status", ["Pending", "Praying"])
+    .in("status", ["Pending", "Praying"]);
+
+  if (search) {
+    query = query.ilike("title", `%${search}%`); 
+  }
+
+  const { data: prayers, error } = await query
     .order("sort_order", { ascending: true })
     .returns<Prayer[]>();
 
@@ -28,6 +43,10 @@ export default async function ProtectedPage() {
       <div className="flex flex-wrap gap-4 justify-between items-center">
         <h2 className="font-bold text-2xl">My Prayer Journal</h2>
         <AddPrayerForm />
+      </div>
+
+      <div className="flex justify-between items-center">
+        <SearchInput />
       </div>
 
       <blockquote className="border-l-4 border-border pl-4 italic text-muted-foreground">
@@ -41,7 +60,7 @@ export default async function ProtectedPage() {
         <div className="p-4 border border-destructive/50 bg-destructive/10 text-destructive-foreground rounded-md flex gap-4 items-center">
           <AlertCircle />
           <p>
-            Sorry, we couldn't fetch your prayers. Please try praying harder!
+            Sorry, we couldn&apos;t fetch your prayers. Please try praying harder!
           </p>
         </div>
       )}
