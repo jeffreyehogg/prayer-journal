@@ -39,12 +39,12 @@ export default async function AnsweredPage() {
         <div className="p-4 border border-destructive/50 bg-destructive/10 text-destructive-foreground rounded-md flex gap-4 items-center">
           <AlertCircle />
           <p>
-            Sorry, we couldn't fetch your prayers. Please try praying harder!
+            Sorry, we couldn't fetch your prayers. Don't stop praying!
           </p>
         </div>
       )}
 
-      {!error && prayers && <PrayerList prayers={prayers} />}
+      {!error && <PrayerList prayers={prayers} emptyMessage="You have no answered prayers yet. Don't stop praying!" />}
     </div>
   );
 }

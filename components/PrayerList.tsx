@@ -145,7 +145,13 @@ function SortablePrayerItem({ prayer }: { prayer: Prayer }) {
   );
 }
 
-export function PrayerList({ prayers: initialPrayers }: { prayers: Prayer[] }) {
+export function PrayerList({ 
+  prayers: initialPrayers,
+  emptyMessage // <-- Add prop
+}: { 
+  prayers: Prayer[],
+  emptyMessage?: string // <-- Make it optional
+}) {
   const [prayers, setPrayers] = useState(initialPrayers);
   const [isPending, startTransition] = useTransition();
 
@@ -167,7 +173,7 @@ export function PrayerList({ prayers: initialPrayers }: { prayers: Prayer[] }) {
   if (prayers.length === 0) {
     return (
       <p className="text-muted-foreground">
-        You haven't added any prayers yet. Add one to get started!
+        {emptyMessage || "You haven't added any prayers yet. Add one to get started!"}
       </p>
     );
   }
