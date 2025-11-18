@@ -23,13 +23,6 @@ export async function Navbar() {
                 variant="link"
                 className="p-0 text-sm font-semibold text-muted-foreground"
               >
-                <Link href="/protected">Prayer Journal</Link>
-              </Button>
-              <Button
-                asChild
-                variant="link"
-                className="p-0 text-sm font-semibold text-muted-foreground"
-              >
                 <Link href="/protected/answered">Answered</Link>
               </Button>
             </>
